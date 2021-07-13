@@ -9,6 +9,9 @@ class Home extends React.Component {
     super(props);
     this.state = {
       userName: '',
+      msg:"",
+   
+      AllMsg:[],
     };
   }
   componentDidMount() {
@@ -16,9 +19,20 @@ class Home extends React.Component {
     this.setState({ userName });
     socket.on('connect', () => {
       socket.on('claimed', function (payload) {
-        alert(`${payload.name} claimed your ticket , hhhhhh${payload.randomNum}`);
+        alert(`${payload.name} ,
+        ${payload.randomNum},
+        ${payload.txt}
+        `
+        );
       });
     });
+
+    socket.on('replaymsg',  (payload) => {
+      this.setState({ newMsg:payload.msg}); 
+      this.setState({oldmsg:this.state.newMsg+this.state.oldmsg}); 
+
+    });
+
   }
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -28,7 +42,7 @@ class Home extends React.Component {
     e.preventDefault();
     const payload = {
       ...this.state,
-      created_at: Date.now(),
+      created_at: Date.now().toLocaleString(),
     };
     console.log('hello', payload);
     // once the user submit the form we need to emit a ticket so all TAs can see that ticket
@@ -36,8 +50,39 @@ class Home extends React.Component {
     // 1
     socket.emit('createTicket', payload);
   };
+
+  handleMsg=async (e)=>{
+    await this.setState({msg:e.target.value});
+    
+  }
+
+
+  updatestate=(e)=>{
+    this.setState({ AllMsg: [...this.state.AllMsg,this.state.msg] })
+
+  }
+  sendMsg=async (e)=>{
+    console.log('tst');
+    e.preventDefault();
+    await this.updatestate()
+
+    const payload = {
+     msg:this.state.AllMsg,
+      created_at: Date.now(),
+      userName:this.state.userName
+    };
+    console.log('Msg', payload);
+    // once the user submit the form we need to emit a ticket so all TAs can see that ticket
+
+    // 1
+    socket.emit('sendmsg', payload);
+
+
+  }
+
   render() {
     return (
+      <div>
       <main className="container">
         <section className="form-card">
           <form id="questions-form" onSubmit={this.handleSubmit}>
@@ -49,7 +94,7 @@ class Home extends React.Component {
               required
               onChange={this.handleChange}
             /> */}
-            <label className="lab">
+            <label className="row1">
               <input
                 type="checkbox"
                 name="cityname"
@@ -59,7 +104,7 @@ class Home extends React.Component {
               />
               Amman
             </label>
-            <label className="cc">
+            <label className="row2">
               <input
                 type="checkbox"
                 name="cityname"
@@ -68,7 +113,7 @@ class Home extends React.Component {
               />
               Aqaba
             </label>
-            <label className="course">
+            <label>
               <input
                 type="checkbox"
                 name="cityname"
@@ -78,7 +123,7 @@ class Home extends React.Component {
               />
               Wadi Rum
             </label>
-            <label className="course">
+            <label>
               <input
                 type="checkbox"
                 name="flight"
@@ -88,7 +133,7 @@ class Home extends React.Component {
               />
               Qatar Airlines
             </label>
-            <label className="course">
+            <label>
               <input
                 type="checkbox"
                 name="flight"
@@ -97,7 +142,7 @@ class Home extends React.Component {
               />
               Fly Emirates
             </label>
-            <label className="course">
+            <label>
               <input
                 type="checkbox"
                 name="flight"
@@ -113,11 +158,24 @@ class Home extends React.Component {
             <label for="vehicle2">Qatar Airlines</label><br/>
                 <input type="checkbox" name="location"  value="Qatar Airlines" onChange={this.handleChange}/> */}
 
-            <button className="question">help!</button>
+            <button >help!</button>
 
           </form>
         </section>
+<br></br>
+
       </main>
+
+
+<div className="feedback">
+<h3>Leave A feedback</h3>
+        <input
+            type="text"
+            onChange={this.handleMsg}
+         />
+    <button  onClick={this.sendMsg}>Send </button>
+    <h2 >{this.state.oldmsg}</h2>
+    </div> </div>
     );
   }
 }

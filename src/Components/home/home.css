@@ -1,8 +1,18 @@
+body{
+  background-image: url("https://images.unsplash.com/photo-1598246038704-74ffbadf5307?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=353&q=80");
+
+
+  background-size: cover;
+}
+
+
 .container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+
 .form-card {
   padding: 16px;
   text-align: center;
@@ -15,14 +25,7 @@
 }
 
 
-.row1 {
-  grid-column-start: 1;
-  grid-column-end: 3;
-}
-.row2 {
-  grid-column-start: 3;
-  grid-column-end: 6;
-}
+
 .feedback
 {
   margin-top:3%;
@@ -33,4 +36,26 @@
 .feedback input
 {
   padding-left:25%;
+}
+
+.center
+{
+
+}
+.centerize
+{
+margin-left:44%
+}
+
+.feedbackmsg
+{
+border: 1px solid gray;
+
+margin:1%;
+}
+
+.boxShadow
+{
+  box-shadow: 1px 2px;
+
 }

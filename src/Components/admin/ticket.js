@@ -1,12 +1,29 @@
+import {Table,Button} from 'react-bootstrap'
+import React from "react";
+
+
 export default function Ticket(props){
+
+  // const [buttonDisabled, setButtonDisabled] = useState(false);
+
   return(
-    <article className="ticket">
-      <h2>{props.question}</h2>
-      <p>City:{props.cityname}</p>
-      <p>flight: {props.flight}</p>
-      <p>time:{new Date(props.created_at).toLocaleDateString()}</p>
-      <p>User Name: {props.userName}</p>
-      <button onClick={()=>props.handleClaim(props.id,props.socketId)}>Claim</button>
-    </article>
+
+<tr>  
+<td>{1}</td>
+
+      <td>{props.clientName}</td>
+      <td>{props.address}</td>
+      <td>{props.phone} </td>
+      <td>{props.Airlines}</td>
+<td>{new Date(Date.now()).toLocaleDateString()}</td>
+
+</tr>
+
+// {/* <Button
+//     variant="primary" onClick={()=>props.handleAccept(props.id,props.socketId)  }>Accept</Button>
+
+
+//     <Button variant="primary" onClick={()=>props.handleRefuse(props.id,props.socketId)}>Refuse</Button> */} */}
+
   )
 }

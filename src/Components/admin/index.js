@@ -2,7 +2,8 @@ import React from 'react';
 import Ticket from './ticket';
 import './admin.css';
 import io from 'socket.io-client';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {ListGroup,Table,Button} from 'react-bootstrap'
 const socket = io('localhost:5000/', { transports: ['websocket'] });
 class Admin extends React.Component {
   constructor(props) {
@@ -10,58 +11,179 @@ class Admin extends React.Component {
     this.state = {
       staffName: '',
       tickets: [],
-      onlineStaff: [],
-    };
+      Allmsg: [],
+      userid:0,
+    oldmsg:"",
+      newMsg:[],
+      userName:"",
+      showMsg: false    };
   }
   componentDidMount() {
     // run once when component is mounted
-    const staffName = prompt("WHAT's your name?");
+    const staffName = "Admin"
     this.setState({ staffName });
     socket.on('connect', () => {
-      //1a
       socket.emit('join', { name: staffName });
-      socket.on('newTicket', (payload) => {
+      socket.on('newReq', (payload) => {
+
         this.setState({ tickets: [...this.state.tickets, payload] }); 
+console.log(this.state.tickets)
+ 
       });
-      socket.on('onlineStaff', (payload) => {
-        this.setState({ onlineStaff: [...this.state.onlineStaff, payload] });
+      socket.on('sentMsg',  async (payload) => {
+      await  this.setState({ 
+        Allmsg: [...this.state.Allmsg,payload],
+        showMsg: true,
+        userid:payload.socketId
+      }); 
+
+
+
+
       });
-      socket.on('offlineStaff', (payload) => {
-        this.setState({
-          onlineStaff: this.state.onlineStaff.filter((staff) => staff.id !== payload.id),
-        });
-      });
+
+      // reciveendmsg
+     
+
     });
+    // this.setState({
+    //   Allmsg:[]
+    // })
   }
-  handleClaim = (id, socketId) => {
+  
+  handleAccept = (id, socketId) => {
     console.log(socketId);
-    socket.emit('claim', { 
+    socket.emit('handle', { 
       id:id,
        name: this.state.staffName,
         studentId: socketId,
-    
+        flag:true
+
     });
   };
+
+
+  handleRefuse=(id, socketId)=>{
+    
+    socket.emit('handle', { 
+      id:id,
+       name: this.state.staffName,
+        studentId: socketId,
+        flag:false
+
+    });
+  }
+
+
+  handleMsg=(e)=>{
+    this.setState({msg:e.target.value});
+  }
+
+  handleReplay = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  replayMsg=(e)=>{
+
+
+
+    e.preventDefault();
+ 
+    const payload = {
+     msg:this.state.repliies,
+      userName:'Admin',
+      msg2:this.state.Allmsg[this.state.Allmsg.length-1].msg,
+      userName2:this.state.Allmsg.clientName,
+      userId:this.state.userid
+    };
+    console.log(payload)
+    socket.emit('replayTo', payload);
+  }
+
   render() {
     return (
+      <div>
       <main className="admin-container">
         <section id="container">
           <h2>Opened Tickets</h2>
-          <section id="tickets">
+          <Table striped bordered hover>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>User Name</th>
+      <th>Address</th>
+      <th>Phone</th>
+      <th>Flight</th>
+      <th>Date</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    
             {this.state.tickets.map((ticket) => {
               return (
-                <Ticket {...ticket} handleClaim={this.handleClaim} key={ticket.id} />
+                <Ticket {...ticket} handleAccept={this.handleAccept} handleRefuse={this.handleRefuse}key={ticket.id} />
               );
-            })}
-          </section>
+            })
+           }
+         
+    </tbody>
+             </Table>
         </section>
         <aside id="online-staff">
-          <h2>Available TAs</h2>
-          {this.state.onlineStaff.map((staff) => (
+          <h2>New Requests</h2>
+          {/* {this.state.onlineStaff.map((staff) => (
             <h2 key={staff.id}>{staff.name}</h2>
-          ))}
+          ))} */}
+
+     
+
+
+         {/* <input
+            type="text"
+            onChange={this.handleMsg}
+         />
+    <button className="question" onClick={this.sendMsg}>Send </button> */}
+
         </aside>
       </main>
+
+<div>
+<ListGroup>
+
+{
+this.state.showMsg &&
+this.state.Allmsg.map((msg2) => (
+  <>
+    <ListGroup.Item> {msg2.userName}: {msg2.msg}</ListGroup.Item>
+    <ListGroup.Item> 
+    <input 
+    className="replay"
+    type="text"
+    name="repliies"
+    placeholder="write a replay..."
+    onChange={this.handleReplay}
+>
+
+    </input>
+
+  <Button className="replay" onClick={this.replayMsg}>Replay </Button> 
+  </ListGroup.Item>
+
+</>
+          ))}
+
+</ListGroup>
+
+{/* <h2>{this.state.userName }:</h2> */}
+          
+          {/* <h2 >{this.state.oldmsg}</h2> */}
+          </div>
+
+
+
+
+          </div>
     );
   }
 }

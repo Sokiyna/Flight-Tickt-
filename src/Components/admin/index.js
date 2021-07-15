@@ -3,6 +3,10 @@ import Ticket from './ticket';
 import './admin.css';
 import io from 'socket.io-client';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-notifications/lib/notifications.css';
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
 import {ListGroup,Table,Button} from 'react-bootstrap'
 const socket = io('localhost:5000/', { transports: ['websocket'] });
 class Admin extends React.Component {
@@ -16,7 +20,8 @@ class Admin extends React.Component {
     oldmsg:"",
       newMsg:[],
       userName:"",
-      showMsg: false    };
+      showMsg: false  
+      };
   }
   componentDidMount() {
     // run once when component is mounted
@@ -50,6 +55,8 @@ console.log(this.state.tickets)
     //   Allmsg:[]
     // })
   }
+
+
   
   handleAccept = (id, socketId) => {
     console.log(socketId);
@@ -58,8 +65,8 @@ console.log(this.state.tickets)
        name: this.state.staffName,
         studentId: socketId,
         flag:true
-
     });
+
   };
 
 
@@ -93,10 +100,10 @@ console.log(this.state.tickets)
      msg:this.state.repliies,
       userName:'Admin',
       msg2:this.state.Allmsg[this.state.Allmsg.length-1].msg,
-      userName2:this.state.Allmsg.clientName,
+      userName2:this.state.Allmsg[this.state.Allmsg.length-1].clientName,
       userId:this.state.userid
     };
-    console.log(payload)
+    console.log("hello",payload.userName2)
     socket.emit('replayTo', payload);
   }
 
@@ -119,10 +126,11 @@ console.log(this.state.tickets)
     </tr>
     </thead>
     <tbody>
-    
+    <NotificationContainer/>
+
             {this.state.tickets.map((ticket) => {
               return (
-                <Ticket {...ticket} handleAccept={this.handleAccept} handleRefuse={this.handleRefuse}key={ticket.id} />
+                <Ticket {...ticket} handleAccept={this.handleAccept} handleRefuse={this.handleRefuse}key={ticket.id} nofitication={this.createNotification} />
               );
             })
            }

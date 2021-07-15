@@ -1,6 +1,10 @@
 import React from 'react';
 import './home.css';
 import {Navbar} from 'react-bootstrap'
+import toast, { Toaster } from 'react-hot-toast';
+
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 import {Form,Button,Col} from 'react-bootstrap/'
 import io from 'socket.io-client';
@@ -18,24 +22,64 @@ class Home extends React.Component {
       msgs:[]
     };
   }
+
+
+  createNotification = (type) => {
+    return () => {
+      switch (type) {
+        case 'info':
+          NotificationManager.info('Info message');
+          break;
+        case 'success':
+          NotificationManager.success('Success message', 'Title here');
+          break;
+        case 'warning':
+          NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
+          break;
+        case 'error':
+          NotificationManager.error('Error message', 'Click me!', 5000, () => {
+            alert('callback');
+          });
+          break;
+      }
+    };
+  };
+
   componentDidMount() {
     // const userName = prompt("Can you provide us with your name?");
     // this.setState({ userName });
 
     //clientName
     socket.on('connect', () => {
-      socket.on('claimed', function (payload) {
-        alert(`${payload.name} ,
+      socket.on('results', function (payload) {
+
+      
+        if(!payload.flag2)
+        {
+          toast.error(`${payload.name} ,
+          ${payload.txt}
+          `);
+
+        }
+        else
+        {
+        toast.success(`${payload.name}: ,
+
         ${payload.randomNum},
+
         ${payload.txt}
-        `
-        );
+        `);
+        }
       });
+   
+ 
+   
+
     });
 
-    socket.on('replaiedtoUsers',  (payload)=> {
+    socket.on('replaiedtoUsers',  (payload,username)=> {
       this.setState({ msgs: [...this.state.msgs, payload] ,
-      showMsgs:true
+      showMsgs:true,
       }); 
   
   
@@ -43,7 +87,7 @@ class Home extends React.Component {
 
 
       )
-    
+
   }
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -71,8 +115,10 @@ class Home extends React.Component {
     // this.setState({msg:''});
 
   }
+
+
+
   sendMsg=async (e)=>{
-       
     e.preventDefault();
     await this.updatestate()
 
@@ -86,6 +132,8 @@ class Home extends React.Component {
     socket.emit('sendmsg', payload);
 
   }
+
+
 
   render() {
     return (
@@ -241,10 +289,12 @@ Destination:       </Form.Label>
         <input
             type="text"
             onChange={this.handleMsg}
+            size="50"
          />
     <button  onClick={this.sendMsg}>Send </button>
     
-    
+        <NotificationContainer/>
+
     <br></br>
     <h2>test</h2>
 
@@ -254,7 +304,7 @@ Destination:       </Form.Label>
   this.state.msgs.map((msg)=>{
     return(
       <div className="feedbackmsg">
-      <p>{msg.userName2}: {msg.msg2} </p>
+      <p>{this.state.clientName}: {msg.msg2} </p>
       <p> {"Admin : "} {msg.msg} </p>
       </div>
     )

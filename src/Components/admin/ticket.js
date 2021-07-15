@@ -16,14 +16,18 @@ export default function Ticket(props){
       <td>{props.phone} </td>
       <td>{props.Airlines}</td>
 <td>{new Date(Date.now()).toLocaleDateString()}</td>
+<td>
+<Button
+  variant="primary" onClick={()=>props.handleAccept(props.id,props.socketId) 
+  
+  }>Accept</Button>
 
+
+  <Button variant="primary" onClick={()=>props.handleRefuse(props.id,props.socketId)}>Refuse</Button> 
+  </td>
 </tr>
 
-// {/* <Button
-//     variant="primary" onClick={()=>props.handleAccept(props.id,props.socketId)  }>Accept</Button>
 
-
-//     <Button variant="primary" onClick={()=>props.handleRefuse(props.id,props.socketId)}>Refuse</Button> */} */}
 
   )
 }

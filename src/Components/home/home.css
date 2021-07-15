@@ -1,8 +1,7 @@
 body{
   background-image: url("https://images.unsplash.com/photo-1598246038704-74ffbadf5307?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=353&q=80");
-
-
   background-size: cover;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 
 
@@ -11,7 +10,9 @@ body{
   align-items: center;
   justify-content: center;
 }
-
+input[type="text"] {
+  font-size:20px;
+}
 
 .form-card {
   padding: 16px;
@@ -38,10 +39,6 @@ body{
   padding-left:25%;
 }
 
-.center
-{
-
-}
 .centerize
 {
 margin-left:44%

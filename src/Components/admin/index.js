@@ -8,7 +8,7 @@ import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 import {ListGroup,Table,Button} from 'react-bootstrap'
-const socket = io('localhost:5000/', { transports: ['websocket'] });
+const socket = io('https://soket-io-app.herokuapp.com/', { transports: ['websocket'] });
 class Admin extends React.Component {
   constructor(props) {
     super(props);

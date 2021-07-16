@@ -8,8 +8,8 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 import {Form,Button,Col} from 'react-bootstrap/'
 import io from 'socket.io-client';
-const SERVER_URL = process.env.SERVER_URL || 'localhost:5000/';
-const socket = io(SERVER_URL, { transports: ['websocket'] });
+const REACT_APP_SERVER_URL = process.env.REACT_APP_SERVER_URL || 'localhost:5000/';
+const socket = io(REACT_APP_SERVER_URL, { transports: ['websocket'] });
 
 class Home extends React.Component {
   constructor(props) {

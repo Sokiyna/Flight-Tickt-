@@ -20,7 +20,7 @@ class Admin extends React.Component {
     oldmsg:"",
       newMsg:[],
       userName:"",
-      showMsg: false  
+      showMsg: false
       };
   }
   componentDidMount() {
@@ -30,8 +30,10 @@ class Admin extends React.Component {
     socket.on('connect', () => {
       socket.emit('join', { name: staffName });
       socket.on('newReq', (payload) => {
-
-        this.setState({ tickets: [...this.state.tickets, payload] }); 
+console.log(payload)
+        this.setState({ tickets: [...this.state.tickets, payload]
+        }
+          ); 
 console.log(this.state.tickets)
  
       });
@@ -49,6 +51,7 @@ console.log(this.state.tickets)
 
       // reciveendmsg
      
+      socket.emit('getAllQueuing');
 
     });
     // this.setState({
@@ -122,6 +125,7 @@ console.log(this.state.tickets)
       <th>Phone</th>
       <th>Flight</th>
       <th>Date</th>
+      <th>State</th>
 
     </tr>
     </thead>
@@ -130,7 +134,7 @@ console.log(this.state.tickets)
 
             {this.state.tickets.map((ticket) => {
               return (
-                <Ticket {...ticket} handleAccept={this.handleAccept} handleRefuse={this.handleRefuse}key={ticket.id} nofitication={this.createNotification} />
+                <Ticket {...ticket} handleAccept={this.handleAccept} handleRefuse={this.handleRefuse}key={ticket.id} nofitication={this.createNotification}/>
               );
             })
            }

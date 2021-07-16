@@ -19,7 +19,8 @@ class Home extends React.Component {
       msg:"",
       showMsgs:false,
       AllMsg:[],
-      msgs:[]
+      msgs:[],
+      counter:1
     };
   }
 
@@ -94,11 +95,20 @@ class Home extends React.Component {
   };
 
   handleSubmit = (e) => {
+    
     e.preventDefault();
+
+    this.setState({
+      counter:this.state.counter+1
+    })
+
     const payload = {
       ...this.state,
       created_at: Date.now().toLocaleString(),
+      counter:this.state.counter
     };
+
+
     console.log('hello', this.state.Destination);
 
     socket.emit('sendRequest', payload);  };
@@ -296,7 +306,7 @@ Destination:       </Form.Label>
         <NotificationContainer/>
 
     <br></br>
-    <h2>test</h2>
+    <h2>Feedback Section</h2>
 
 {
   this.state.showMsgs &&

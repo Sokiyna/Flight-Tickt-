@@ -3,14 +3,13 @@ import React from "react";
 
 
 export default function Ticket(props){
-
+// console.log(propsclientName)
   // const [buttonDisabled, setButtonDisabled] = useState(false);
 
   return(
 
 <tr>  
-<td>{1}</td>
-
+<td>{props.counter2}</td>
       <td>{props.clientName}</td>
       <td>{props.address}</td>
       <td>{props.phone} </td>

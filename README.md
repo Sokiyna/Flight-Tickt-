@@ -20,6 +20,9 @@ Technology: React, Node.js, SoketIo, MongoDB.
  
 7/17/2021 7:30pm - Application now has a fully-functional. -->
 
+### live URL : https://flights-soketio.netlify.app/
+### GitHub Repository: https://github.com/Sokiyna/Flight-Tickt-
+
 # Project UML
 
 ![project](./project.jpg)
